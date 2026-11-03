@@ -6,7 +6,8 @@ avaliacoes: id_usuario, id_midia, tipo, nota, review   (chave composta id_usuari
 */
 
 let usuarios = [
-  { id: 1, nome: 'Admin', email: 'admin@soulgeek.com', senha: '123456', perfil: 'admin' }
+   { id: 1, nome: 'Admin', email: 'admin@soulgeek.com', senha: '123456', perfil: 'admin' },
+   { id: 2, nome: 'Comum', email: 'comum@soulgeek.com', senha: '654321', perfil: 'comum' }
 ];
 
 const getAllUsuarios = () => usuarios;
@@ -17,58 +18,43 @@ const getUsuarioEmail = (email) => usuarios.find(usuario => usuario.email.toLowe
 
 const getUsuarioNome = (nome) => usuarios.find(usuario => usuario.nome.toLowerCase() === nome.toLowerCase());
 
-const createUsuario = (usuarioData) => {
-    if (getUsuarioEmail(usuarioData.email)) {
-        return "email_repetido";
-    }
-    if (getUsuarioNome(usuarioData.nome)) {
-        return "nome_repetido";
-    }
-    const newUsuario = {
-    id: usuarios.length > 0 ? Math.max(...usuarios.map(t => t.id)) + 1 : 1,
-    nome: usuarioData.nome,
-    email: usuarioData.email,
-    senha: usuarioData.senha,
-    perfil: 'comum'  
-    };
-    usuarios.push(newUsuario);
-    return usuarios;
- };
+const contarAdmins = () => usuarios.filter(usuario => usuario.perfil.toLowerCase() === 'admin').length;
 
- const deleteUsuario = (id) => {
-   
+const createUsuario = (usuarioData) => {
+   const newUsuario = {
+      id: usuarios.length > 0 ? Math.max(...usuarios.map(t => t.id)) + 1 : 1,
+      nome: usuarioData.nome,
+      email: usuarioData.email,
+      senha: usuarioData.senha,
+      perfil: 'comum'
+   };
+   usuarios.push(newUsuario);
+   return usuarios;
+};
+
+const deleteUsuario = (id) => {
+
    const usuario = getUsuarioId(id);
-   const indice = usuarios.indexOf(usuario);  
-   if (indice !== -1){   
-      usuarios.splice(indice, 1);
-      return usuarios;  
-   }  
-   else {
+
+   if (!usuario) {
       return null;
    }
-   
- };
 
- const atualizarUsuario = (usuarioData) => {
-   
-    const usuarioExistente = getUsuarioId(usuarioData.id);
+   const totalAdmins = contarAdmins();
+   if (usuario.perfil === 'admin' && totalAdmins === 1) {
+      return false;
+   }
+
+   const indice = usuarios.indexOf(usuario);
+   usuarios.splice(indice, 1);
+   return usuarios;
+};
+
+const atualizarUsuario = (usuarioData) => {
+   const usuarioExistente = getUsuarioId(usuarioData.id);
 
    if (!usuarioExistente) {
       return null;
-   }
-   
-   if (usuarioData.email !== undefined && usuarioData.email !== "") {
-      const donoEmail = getUsuarioEmail(usuarioData.email);
-      if (donoEmail && donoEmail.id !== usuarioExistente.id) {
-         return "email_repetido";
-      }
-   }
-
-   if (usuarioData.nome !== undefined && usuarioData.nome !== "") {
-      const donoNome = getUsuarioNome(usuarioData.nome);
-      if (donoNome && donoNome.id !== usuarioExistente.id) {
-         return "nome_repetido";
-      }
    }
 
    if (usuarioData.email !== undefined && usuarioData.email !== "") {
@@ -78,15 +64,17 @@ const createUsuario = (usuarioData) => {
    if (usuarioData.nome !== undefined && usuarioData.nome !== "") {
       usuarioExistente.nome = usuarioData.nome;
    }
+
    return usuarios;
- };
+};
 
 module.exports = {
-    getAllUsuarios,
-    getUsuarioId,
-    getUsuarioEmail,
-    getUsuarioNome,
-    createUsuario,
-    deleteUsuario,
-    atualizarUsuario
- }
+   getAllUsuarios,
+   getUsuarioId,
+   getUsuarioEmail,
+   getUsuarioNome,
+   contarAdmins,
+   createUsuario,
+   deleteUsuario,
+   atualizarUsuario
+}

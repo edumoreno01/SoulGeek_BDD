@@ -19,8 +19,9 @@
 
  //const taskRoutes = require('./routes/taskRoute');
  const initialRoutes = require('./routes/initialRoute');
-
+ const usuarioRoutes = require('./routes/usuarioRoute');
  app.use('/', initialRoutes);
+ app.use('/usuarios', usuarioRoutes);
  //app.use('/tasks', taskRoutes);
 
  module.exports = app;

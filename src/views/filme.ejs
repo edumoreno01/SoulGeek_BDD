@@ -1,0 +1,31 @@
+<%- include('partes/header_padrao')%> 
+
+<main class="flex-grow-1" id="main">
+    <div class="container py-5">
+      <div>
+        <h2 class="mb-3">Buscar Filmes</h2>
+        <div class="input-group">
+          <input id="campoBusca" type="text" class="form-control" placeholder="Buscar Filmes" />
+
+          <button class="btn btn-success" type="submit" id="btnBusca" onclick="carregarFilmes()">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <section id="resultados" class="mt-1 row g-4"></section>
+    </div>
+
+    <section id="Sombra">
+      <input type="checkbox" id="btnClaroEscuro" />
+      <label for="btnClaroEscuro" class="slider">
+        <div id="fundo" class="btn btn-dark">
+          <i id="Sol" class="bi bi-brightness-high-fill"></i>
+          <i id="Lua" class="bi bi-moon-stars-fill"></i>
+        </div>
+      </label>
+    </section>
+
+  </main>
+
+<%- include('partes/footer')%>

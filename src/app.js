@@ -1,5 +1,5 @@
  const express = require('express');
-
+ const db = require('./db');
  const app = express();
  
  const methodOverride = require('method-override');
@@ -25,3 +25,6 @@
  //app.use('/tasks', taskRoutes);
 
  module.exports = app;
+
+ const express = require('express');
+const app = express();

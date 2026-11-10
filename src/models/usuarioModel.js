@@ -10,7 +10,9 @@ let usuarios = [
    { id: 2, nome: 'Comum', email: 'comum@soulgeek.com', senha: '654321', perfil: 'comum' }
 ];
 
-const getAllUsuarios = () => usuarios;
+const db = require('../db');
+
+const getAllUsuarios = () => db.prepare('SELECT * FROM usuarios').all();
 
 const getUsuarioId = (id) => usuarios.find(usuario => usuario.id === parseInt(id));
 

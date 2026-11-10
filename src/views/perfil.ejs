@@ -1,0 +1,77 @@
+<%- include('partes/header_padrao')%> 
+
+  <main class="flex-grow-1 container">
+    <div id="perfilDeslogado" class="text-center mt-5">
+      <h2>Você não está logado</h2>
+
+      <p>Entre em uma conta para acessar seu perfil.</p>
+
+      <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#Login">
+        Entrar
+      </button>
+    </div>
+
+    <div id="perfilLogado" style="display: none">
+      <div class="d-flex align-items-center gap-3 mt-4 mb-4">
+        <i class="bi bi-person-circle fs-1"></i>
+        <div>
+          <h1 id="nomeUsuario" class="mb-0"></h1>
+          <p id="emailUsuario" class="text-secondary mb-0"></p>
+        </div>
+        <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#editarPerfilModal">
+          Editar Perfil
+        </button>
+      </div>
+
+      <div class="row text-center">
+        <div class="col">
+          <h3 id="qtdCurtidos">0</h3>
+          <p>❤️ Curtidos</p>
+        </div>
+
+        <div class="col">
+          <h3 id="qtdWatchlist">0</h3>
+          <p>📑 Adicionados</p>
+        </div>
+
+        <div class="col">
+          <h3 id="qtdNotas">0</h3>
+          <p>⭐ Média das Avaliações</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <h3>❤️ Curtidos</h3>
+
+      <div id="listaCurtidos" class="row"></div>
+
+      <hr />
+
+      <h3>📑 Adicionados</h3>
+
+      <div id="listaWatchlist" class="row"></div>
+
+      <hr />
+
+      <h3>⭐ Avaliados</h3>
+
+      <div id="listaAvaliados" class="row"></div>
+    </div>
+
+    
+
+  </main>
+
+
+  <section id="Sombra">
+    <input type="checkbox" id="btnClaroEscuro" />
+    <label for="btnClaroEscuro" class="slider">
+      <div id="fundo" class="btn btn-dark">
+        <i id="Sol" class="bi bi-brightness-high-fill"></i>
+        <i id="Lua" class="bi bi-moon-stars-fill"></i>
+      </div>
+    </label>
+  </section>
+
+<%- include('partes/footer')%>

@@ -25,6 +25,3 @@
  //app.use('/tasks', taskRoutes);
 
  module.exports = app;
-
- const express = require('express');
-const app = express();

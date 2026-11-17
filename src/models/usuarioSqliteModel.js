@@ -11,8 +11,6 @@ const getAllUsuarios = () => {
 };
 
 
-
-c
 const getUsuarioId = (id) => {
     return db.prepare(`
         SELECT id_usuario AS id, nome, email, perfil

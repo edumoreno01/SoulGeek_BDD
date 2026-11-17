@@ -1,4 +1,4 @@
-<footer class="footer-bg text-light py-5 mt-5">
+  <footer class="footer-bg text-light py-5 mt-5">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
@@ -12,30 +12,48 @@
         <div class="col-md-4">
           <h5 class="footer-texto">Navegação</h5>
           <div class="gap-4 d-flex">
-            <a href="perfil.html" class="footer-link">
-              <i class="bi bi-person-circle"></i>
-              Perfil
-            </a>
+            <% if (paginaAtual !== 'home') { %>
+                <a href="/" class="footer-link">
+                    <i class="bi bi-house-door"></i>
+                    Home
+                </a>
+            <% } %>
 
-            <a href="serie.html" class="footer-link">
-              <i class="bi bi-tv"></i>
-              Série
-            </a>
+            <% if (paginaAtual !== 'perfil') { %>
+                <a href="/perfil" class="footer-link">
+                    <i class="bi bi-person-circle"></i>
+                    Perfil
+                </a>
+            <% } %>
 
-            <a href="filme.html" class="footer-link">
-              <i class="bi bi-camera-video"></i>
-              Filme
-            </a>
+            <% if (paginaAtual !== 'series') { %>
+                <a href="/series" class="footer-link">
+                    <i class="bi bi-tv"></i>
+                    Séries
+                </a>
+            <% } %>
 
-            <a href="ator.html" class="footer-link">
-              <i class="bi bi-person-badge"></i>
-              Ator
-            </a>
+            <% if (paginaAtual !== 'filmes') { %>
+                <a href="/filmes" class="footer-link">
+                    <i class="bi bi-camera-video"></i>
+                    Filmes
+                </a>
+            <% } %>
 
-            <a href="sobre.html" target="_blank" class="footer-link">
-              <i class="bi bi-question-circle"></i>
-              Sobre
-            </a>
+            <% if (paginaAtual !== 'atores') { %>
+                <a href="/atores" class="footer-link">
+                  <i class="bi bi-person-badge"></i>
+                  Ator
+                </a>
+            <% } %>
+
+              <% if (paginaAtual !== 'sobre') { %>
+                  <a href="/sobre" class="footer-link">
+                      <i class="bi bi-question-circle"></i>
+                      Sobre
+                  </a>
+              <% } %>
+
           </div>
         </div>
 

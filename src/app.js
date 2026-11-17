@@ -16,6 +16,21 @@
  // Configurando middlewares
  app.use(express.json());
  app.use(express.urlencoded({ extended: true }));
+ 
+app.use((req, res, next) => {
+    const paginas = {
+        '/': 'home',
+        '/filmes': 'filmes',
+        '/series': 'series',
+        '/perfil': 'perfil',
+        '/sobre': 'sobre',
+        '/midias': 'midias',
+        '/detalhes-filme': 'detalhes-filme'
+    };
+
+    res.locals.paginaAtual = paginas[req.path] || '';
+    next();
+});
 
  //const taskRoutes = require('./routes/taskRoute');
  const initialRoutes = require('./routes/initialRoute');

@@ -36,6 +36,9 @@ const createUsuario = (req, res) => {
     if(req.body.nome == null || req.body.nome == ""){
         return res.status(400).json({ erro: 'Digite um nome' });
     }
+    if(req.body.senha == null || req.body.senha == ""){
+        return res.status(400).json({ erro: 'Digite uma senha' });
+    }
     if (usuarioModel.getUsuarioEmail(req.body.email)) {
         return res.status(400).json({ erro: 'Email repetido' });
     }
@@ -51,7 +54,7 @@ const createUsuario = (req, res) => {
 const deleteUsuario = (req, res) => {
    const usuariodeletada = usuarioModel.deleteUsuario(req.params.id);
    if (usuariodeletada === null) {
-      return res.status(404).json({ erro: 'Usuário não encontrada' });
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
    }
    if (usuariodeletada === false){
         return res.status(400).json({ erro: 'Não pode não existir usuários admins' });
@@ -64,7 +67,7 @@ const deleteUsuario = (req, res) => {
 const atualizarUsuario = (req, res) => {
    const usuarioexistente = usuarioModel.getUsuarioId(req.params.id);
    if (!usuarioexistente){
-    return res.status(404).json({ erro: 'Usuário não encontrada' });
+    return res.status(404).json({ erro: 'Usuário não encontrado' });
    }
    if (req.body.email === undefined || req.body.email == ""){
     return res.status(400).json({ erro: 'Digite um email' });

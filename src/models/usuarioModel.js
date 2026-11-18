@@ -5,69 +5,57 @@ watchlist:  id_usuario, id_midia, tipo   (chave composta id_usuario + id_midia)
 avaliacoes: id_usuario, id_midia, tipo, nota, review   (chave composta id_usuario + id_midia)
 */
 
-let usuarios = [
-   { id: 1, nome: 'Admin', email: 'admin@soulgeek.com', senha: '123456', perfil: 'admin' },
-   { id: 2, nome: 'Comum', email: 'comum@soulgeek.com', senha: '654321', perfil: 'comum' }
-];
 
 const db = require('../db');
+const bcrypt = require('bcrypt');
 
-const getAllUsuarios = () => db.prepare('SELECT * FROM usuarios').all();
+const getAllUsuarios = () => {
+   return db.prepare('SELECT id_usuario AS id, nome, email, perfil FROM usuarios').all();
+};
 
-const getUsuarioId = (id) => usuarios.find(usuario => usuario.id === parseInt(id));
+const getUsuarioId = (id) => {
+   return db.prepare('SELECT id_usuario AS id, nome, email, perfil FROM usuarios WHERE id_usuario = ?').get(id);
+};
 
-const getUsuarioEmail = (email) => usuarios.find(usuario => usuario.email.toLowerCase() === email.toLowerCase());
+const getUsuarioEmail = (email) => {
+   return db.prepare('SELECT id_usuario AS id, nome, email, perfil FROM usuarios WHERE email = ? COLLATE NOCASE').get(email);
+};
 
-const getUsuarioNome = (nome) => usuarios.find(usuario => usuario.nome.toLowerCase() === nome.toLowerCase());
+const getUsuarioNome = (nome) => {
+   return db.prepare('SELECT id_usuario AS id, nome, email, perfil FROM usuarios WHERE nome = ? COLLATE NOCASE').get(nome);
+};
 
-const contarAdmins = () => usuarios.filter(usuario => usuario.perfil.toLowerCase() === 'admin').length;
+const contarAdmins = () => {
+   const resultado = db.prepare('SELECT COUNT(*) AS total FROM usuarios WHERE perfil = ?').get('admin');
+   return resultado.total;
+};
+
 
 const createUsuario = (usuarioData) => {
-   const newUsuario = {
-      id: usuarios.length > 0 ? Math.max(...usuarios.map(t => t.id)) + 1 : 1,
-      nome: usuarioData.nome,
-      email: usuarioData.email,
-      senha: usuarioData.senha,
-      perfil: 'comum'
-   };
-   usuarios.push(newUsuario);
-   return usuarios;
+   const senhaHash = bcrypt.hashSync(usuarioData.senha, 10);
+   db.prepare('INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES (?, ?, ?, ?)').run(usuarioData.nome, usuarioData.email, senhaHash, 'comum');
+   return getAllUsuarios();
 };
 
 const deleteUsuario = (id) => {
-
    const usuario = getUsuarioId(id);
-
    if (!usuario) {
       return null;
    }
-
-   const totalAdmins = contarAdmins();
-   if (usuario.perfil === 'admin' && totalAdmins === 1) {
+   if (usuario.perfil === 'admin' && contarAdmins() <= 1) {
       return false;
    }
-
-   const indice = usuarios.indexOf(usuario);
-   usuarios.splice(indice, 1);
-   return usuarios;
+   db.prepare('DELETE FROM usuarios WHERE id_usuario = ?').run(id);
+   return getAllUsuarios();
 };
 
 const atualizarUsuario = (usuarioData) => {
    const usuarioExistente = getUsuarioId(usuarioData.id);
-
    if (!usuarioExistente) {
       return null;
    }
-
-   if (usuarioData.email !== undefined && usuarioData.email !== "") {
-      usuarioExistente.email = usuarioData.email;
-   }
-
-   if (usuarioData.nome !== undefined && usuarioData.nome !== "") {
-      usuarioExistente.nome = usuarioData.nome;
-   }
-
-   return usuarios;
+   db.prepare('UPDATE usuarios SET nome = ?, email = ? WHERE id_usuario = ?').run(usuarioData.nome, usuarioData.email, usuarioData.id);
+   return getAllUsuarios();
 };
 
 module.exports = {

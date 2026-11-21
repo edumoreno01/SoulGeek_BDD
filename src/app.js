@@ -1,7 +1,7 @@
  const express = require('express');
- const db = require('./db');
  const app = express();
- 
+ const session = require('express-session');
+
  const methodOverride = require('method-override');
  
  app.use(methodOverride('_method'))
@@ -35,6 +35,11 @@ app.use((req, res, next) => {
  //const taskRoutes = require('./routes/taskRoute');
  const initialRoutes = require('./routes/initialRoute');
  const usuarioRoutes = require('./routes/usuarioRoute');
+ app.use(session({
+   secret: 'soulgeek-segredo',
+   resave: false,
+   saveUninitialized: false
+}));
  app.use('/', initialRoutes);
  app.use('/usuarios', usuarioRoutes);
  //app.use('/tasks', taskRoutes);

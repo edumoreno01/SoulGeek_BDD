@@ -1,3 +1,4 @@
+const express = require('express');
 const router = express.Router();
 
 const initialController = require('../controllers/initialController');
@@ -8,10 +9,6 @@ const initialController = require('../controllers/initialController');
 router.get('/', initialController.paginaInicial);
 
 // Outras Paginas
-router.get('/', (req, res) => {
-    res.render('home', { paginaAtual: 'home' });
-});
-
 router.get('/filmes', (req, res) => {
     res.render('filme', { paginaAtual: 'filmes' });
 });

@@ -1,4 +1,5 @@
 const usuarioModel = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
 
 // GET /usuarios - Listar todas os usuarios
 const getAllUsuarios = (req, res) => {
@@ -22,7 +23,7 @@ const getUsuarioId = (req, res) => {
          404 Not found -> Recurso não encontrado
          500 Internet Server Error -> Erro inesperado no servidor
       */
-      return res.status(404).json({ erro: 'Usuário não encontrada' });
+      return res.status(404).json({ erro: 'Usuário não encontrado' });
    }
    res.json(usuario);
 }
@@ -92,10 +93,45 @@ const atualizarUsuario = (req, res) => {
    res.json(usuarioatualizada);
 };
 
+const login = (req, res) => {
+   if (req.body.email === undefined || req.body.email == "") {
+      return res.status(400).json({ erro: 'Digite email' });
+   }
+   if (req.body.senha === undefined || req.body.senha == "") {
+      return res.status(400).json({ erro: 'Digite senha' });
+   }
+   const usuario = usuarioModel.getUsuarioLogin(req.body.email);
+   if (!usuario) {
+      return res.status(401).json({ erro: 'Email ou senha incorretos' });
+   }
+   const senhaCorreta = bcrypt.compareSync(req.body.senha,usuario.senha_hash);
+   if (!senhaCorreta) {
+      return res.status(401).json({ erro: 'Email ou senha incorretos' });
+   }
+   req.session.usuario = { id: usuario.id, nome: usuario.nome, perfil: usuario.perfil };
+   res.status(200).json({ id: usuario.id, nome: usuario.nome, perfil: usuario.perfil });
+};
+
+const logout = (req, res) => {
+   req.session.destroy(() => {
+      res.status(200).json({erro: 'Logout realizado'});
+   });
+};
+
+const sessao = (req, res) => {
+   if (!req.session.usuario) {
+      return res.status(401).json({ erro: 'Não logado' });
+   }
+   res.status(200).json(req.session.usuario);
+};
+
 module.exports = {
    getAllUsuarios,
    getUsuarioId,
    createUsuario,
    deleteUsuario,
    atualizarUsuario,
+   login,
+   logout,
+   sessao
 };

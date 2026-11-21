@@ -9,6 +9,10 @@ avaliacoes: id_usuario, id_midia, tipo, nota, review   (chave composta id_usuari
 const db = require('../db');
 const bcrypt = require('bcrypt');
 
+const getUsuarioLogin = (email) => {
+   return db.prepare('SELECT id_usuario AS id, nome, email, perfil, senha_hash FROM usuarios WHERE email = ? COLLATE NOCASE').get(email);
+};
+
 const getAllUsuarios = () => {
    return db.prepare('SELECT id_usuario AS id, nome, email, perfil FROM usuarios').all();
 };
@@ -59,6 +63,7 @@ const atualizarUsuario = (usuarioData) => {
 };
 
 module.exports = {
+   getUsuarioLogin,
    getAllUsuarios,
    getUsuarioId,
    getUsuarioEmail,

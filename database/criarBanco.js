@@ -19,27 +19,33 @@ db.exec(`
 
     CREATE TABLE IF NOT EXISTS midias (
         id_midia INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_externo TEXT NOT NULL,
+        id_externo TEXT,
         tipo TEXT NOT NULL CHECK (tipo IN ('filme', 'serie')),
-        origem_api TEXT NOT NULL,
+        origem_api TEXT NOT NULL DEFAULT 'local',
         titulo TEXT NOT NULL,
-        UNIQUE (origem_api, tipo, id_externo)
+        poster TEXT,
+        sinopse TEXT,
+        genero TEXT,
+        ano INTEGER,
+        criado_por INTEGER,
+        UNIQUE (origem_api, tipo, id_externo),
+        FOREIGN KEY (criado_por) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
     );
 
     CREATE TABLE IF NOT EXISTS curtidos (
         id_usuario INTEGER NOT NULL,
         id_midia INTEGER NOT NULL,
         PRIMARY KEY (id_usuario, id_midia),
-        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-        FOREIGN KEY (id_midia) REFERENCES midias(id_midia)
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+        FOREIGN KEY (id_midia) REFERENCES midias(id_midia) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS watchlist (
         id_usuario INTEGER NOT NULL,
         id_midia INTEGER NOT NULL,
         PRIMARY KEY (id_usuario, id_midia),
-        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-        FOREIGN KEY (id_midia) REFERENCES midias(id_midia)
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+        FOREIGN KEY (id_midia) REFERENCES midias(id_midia)ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS avaliacoes (
@@ -48,8 +54,8 @@ db.exec(`
         nota INTEGER NOT NULL CHECK (nota BETWEEN 1 AND 5),
         review TEXT,
         PRIMARY KEY (id_usuario, id_midia),
-        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-        FOREIGN KEY (id_midia) REFERENCES midias(id_midia)
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+        FOREIGN KEY (id_midia) REFERENCES midias(id_midia)ON DELETE CASCADE
     );
 `);
 

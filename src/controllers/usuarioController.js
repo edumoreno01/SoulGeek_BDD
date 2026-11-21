@@ -60,7 +60,13 @@ const deleteUsuario = (req, res) => {
    if (usuariodeletada === false){
         return res.status(400).json({ erro: 'Não pode não existir usuários admins' });
    }
+   if (parseInt(req.params.id) === req.session.usuario.id) {
+   req.session.destroy(() => {
+      res.status(204).send();
+   });}
+   else{
    res.status(204).send();
+   }
 };
 
 

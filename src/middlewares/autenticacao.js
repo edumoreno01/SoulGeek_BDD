@@ -20,10 +20,10 @@ const exigirProprioOuAdmin = (req, res, next) => {
       return res.status(401).json({ erro: 'Faça login por favor' });
    }
    if (req.session.usuario.perfil === 'admin'){
-    next();
+    return next();
    }
    if(req.session.usuario.id === parseInt(req.params.id)){
-    next();
+    return next();
    }
    else{
     return res.status(403).json({ erro: 'Acesso proibido' });

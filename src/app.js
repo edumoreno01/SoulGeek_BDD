@@ -36,6 +36,7 @@ app.use((req, res, next) => {
  const initialRoutes = require('./routes/initialRoute');
  const usuarioRoutes = require('./routes/usuarioRoute');
  const midiaRoutes = require('./routes/midiaRoute')
+ const curtidosRoutes = require('./routes/curtidosRoute')
  app.use(session({
    secret: 'soulgeek-segredo',
    resave: false,
@@ -44,5 +45,6 @@ app.use((req, res, next) => {
  app.use('/', initialRoutes);
  app.use('/usuarios', usuarioRoutes);
  app.use('/api/midias', midiaRoutes);
+ app.use('/api/curtidos', curtidosRoutes);
 
  module.exports = app;

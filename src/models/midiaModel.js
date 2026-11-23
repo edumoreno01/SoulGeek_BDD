@@ -1,5 +1,22 @@
 const db = require('../db');
 
+const getMidiaExterna = (origem_api, tipo, id_externo) => {
+   return db.prepare('SELECT id_midia AS id, id_externo, tipo, origem_api, titulo FROM midias WHERE origem_api = ? AND tipo = ? AND id_externo = ?').get(origem_api, tipo, String(id_externo));
+};
+
+const createMidiaExterna = (dados) => {
+   return db.prepare('INSERT INTO midias (id_externo, tipo, origem_api, titulo) VALUES (?, ?, ?, ?)').run(String(dados.id_externo), dados.tipo, dados.origem_api, dados.titulo);
+}
+
+const acharOuCriarMidia = (dados) => {
+   const midia = getMidiaExterna(dados.origem_api, dados.tipo, dados.id_externo);
+   if (midia) {
+      return midia.id;
+   }
+   const resultado = createMidiaExterna(dados);
+   return resultado.lastInsertRowid;
+};
+
 const getAllMidias = () => {
    return db.prepare('SELECT id_midia AS id, id_externo, tipo, origem_api, titulo, poster, sinopse, genero, ano FROM midias').all();
 };
@@ -32,6 +49,9 @@ const deleteMidia = (id) => {
 };
 
 module.exports = {
+   getMidiaExterna,
+   createMidiaExterna,
+   acharOuCriarMidia,
     getAllMidias,
     getMidiaId,
     createMidia,

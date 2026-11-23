@@ -1,17 +1,26 @@
-/*IMPORTANTE!!!
-usuarios:   id, nome (único), email (único), senha, perfil ('admin' ou 'comum')
-curtidos:   id_usuario, id_midia, tipo   (chave composta id_usuario + id_midia)
-watchlist:  id_usuario, id_midia, tipo   (chave composta id_usuario + id_midia)
-avaliacoes: id_usuario, id_midia, tipo, nota, review   (chave composta id_usuario + id_midia)
-*/
+const db = require('../db');
 
-let curtidos = [
-    {id_usuario: 1, id_midia: "tt0096895", tipo: "filme"},
-    {id_usuario: 1, id_midia: "tt0196895", tipo: "filme"}
-];
+const getCurtidosUsuario = (id_usuario) => {
+   return db.prepare('SELECT m.id_midia AS id, m.id_externo, m.tipo, m.origem_api, m.titulo, m.poster FROM curtidos AS c INNER JOIN midias AS m ON c.id_midia = m.id_midia WHERE c.id_usuario = ?').all(id_usuario);
+};
 
-const getAllCurtidos = () => curtidos;
+const getCurtido = (id_usuario, id_midia) => {
+   return db.prepare('SELECT id_usuario, id_midia FROM curtidos WHERE id_usuario = ? AND id_midia = ?').get(id_usuario, id_midia);
+};
 
-const getCurtidoId = (id) => curtidos.find(curtidos => curtidos.id === parseInt(id));
+const createCurtido = (id_usuario, id_midia) => {
+    db.prepare('INSERT INTO curtidos (id_usuario, id_midia) VALUES(?, ?)').run(id_usuario, id_midia);
+    return getCurtidosUsuario(id_usuario);
+};
 
-const getCurtidoFilme = (id) => curtidos.find(curtido => curtido.id === parseInt(id));
+const deleteCurtido = (id_usuario, id_midia) => {
+    db.prepare('DELETE FROM curtidos WHERE id_usuario = ? AND id_midia = ?').run(id_usuario, id_midia);
+    return getCurtidosUsuario(id_usuario);
+};
+
+module.exports = {
+    getCurtidosUsuario,
+    getCurtido,
+    createCurtido,
+    deleteCurtido
+}

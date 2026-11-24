@@ -1,7 +1,7 @@
 const btnCadastro = document.getElementById("btnCadastro");
 btnCadastro.addEventListener("click", async () => {
   const nome = document.getElementById("cadastroNome").value;
-  const email = document.getElementById("cadastroEmail").value;
+  const email = document.getElementById("cadastroEmail").value.toLowerCase();;
   const senha = document.getElementById("cadastroSenha").value;
   const confirmacaoSenha = document.getElementById(
     "cadastroConfirmacaoSenha",
@@ -32,6 +32,11 @@ btnCadastro.addEventListener("click", async () => {
 
   const dados = await resposta.json();
   if (resposta.ok) {
+    await fetch("/usuarios/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
     alert("Conta criada!");
     const modalEl = document.getElementById("SignIn");
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
@@ -64,8 +69,8 @@ btnLogin.addEventListener("click", async () => {
     const modalEl = document.getElementById("Login");
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.hide();
-    mostrarPerfil(dados);
-  location.reload()
+      location.reload()
+
   } else {
     alert(dados.erro);
   }

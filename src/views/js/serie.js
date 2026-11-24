@@ -54,7 +54,7 @@ function mostrarNaTela(series) {
 
     const a = document.createElement("a");
     a.addEventListener("click", () => {
-      localStorage.setItem("serieSelecionada", serie.show.name);
+      localStorage.setItem("serieSelecionada", serie.show.id);
     });
     a.href = `/midias`;
     a.className = "media-card";

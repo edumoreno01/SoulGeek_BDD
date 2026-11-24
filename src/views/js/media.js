@@ -1,5 +1,7 @@
 const serieSelecionada = localStorage.getItem("serieSelecionada");
 let serieAtual;
+let curtidaAtual = null;
+const btnLike = document.getElementById("btnLike");
 async function buscarSerie() {
   const resposta = await fetch(
     `https://api.tvmaze.com/search/shows?q=${serieSelecionada}`,
@@ -26,6 +28,7 @@ async function buscarSerie() {
 
   const genero = document.getElementById("generos");
   genero.innerHTML = serie.show.genres;
+  atualizarBotaoLike();
 }
 
 
@@ -62,30 +65,63 @@ btnWatchlist.addEventListener("click", () => {
   console.log(usuarioLogado.watchlist);
 });
 
-const btnLike = document.getElementById("btnLike");
+async function atualizarBotaoLike() {
+  const resposta = await fetch("/api/curtidos");
 
-btnLike.addEventListener("click", async () => {
-    let poster = null;
-  if (serieAtual.show.image != null) {
-    poster = serieAtual.show.image.original;
+  if (resposta.status === 401) {
+    document.getElementById("interacoesUsuario").style.display = "none";
+    return;
   }
-  const resposta = await fetch("/api/curtidos", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      tipo: "serie",
-      id_externo: serieAtual.show.id,
-      titulo: serieAtual.show.name,
-      poster: poster
-    }),
-  });
 
-  const dados = await resposta.json();
-  if (resposta.ok) {
+  const lista = await resposta.json();
+  curtidaAtual = null;
+  for (let i = 0; i < lista.length; i++) {
+    if (lista[i].tipo === "serie" && lista[i].id_externo === String(serieAtual.show.id)) {
+      curtidaAtual = lista[i];
+    }
+  }
+
+  if (curtidaAtual) {
     btnLike.classList.remove("btn-danger");
     btnLike.classList.add("btn-success");
     btnLike.innerHTML = '<i class="bi bi-heart-fill"></i> Curtido';
   } else {
+    btnLike.classList.remove("btn-success");
+    btnLike.classList.add("btn-danger");
+    btnLike.innerHTML = '<i class="bi bi-heart-fill"></i> Curtir';
+  }
+}
+
+
+
+btnLike.addEventListener("click", async () => {
+  let resposta;
+
+  if (curtidaAtual) {
+    resposta = await fetch(`/api/curtidos/${curtidaAtual.id}`, {
+      method: "DELETE",
+    });
+  } else {
+    let poster = null;
+    if (serieAtual.show.image != null) {
+      poster = serieAtual.show.image.original;
+    }
+    resposta = await fetch("/api/curtidos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tipo: "serie",
+        id_externo: serieAtual.show.id,
+        titulo: serieAtual.show.name,
+        poster: poster,
+      }),
+    });
+  }
+
+  if (resposta.ok) {
+    atualizarBotaoLike();
+  } else {
+    const dados = await resposta.json();
     alert(dados.erro);
   }
 });

@@ -65,6 +65,7 @@ btnLogin.addEventListener("click", async () => {
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.hide();
     mostrarPerfil(dados);
+  location.reload()
   } else {
     alert(dados.erro);
   }

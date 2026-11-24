@@ -5,7 +5,7 @@ const getMidiaExterna = (origem_api, tipo, id_externo) => {
 };
 
 const createMidiaExterna = (dados) => {
-   return db.prepare('INSERT INTO midias (id_externo, tipo, origem_api, titulo) VALUES (?, ?, ?, ?)').run(String(dados.id_externo), dados.tipo, dados.origem_api, dados.titulo);
+   return db.prepare('INSERT INTO midias (id_externo, tipo, origem_api, titulo, poster) VALUES (?, ?, ?, ?, ?)').run(String(dados.id_externo), dados.tipo, dados.origem_api, dados.titulo, dados.poster || null);
 }
 
 const acharOuCriarMidia = (dados) => {

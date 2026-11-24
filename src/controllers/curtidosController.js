@@ -26,6 +26,10 @@ if (req.body.id_midia != null && req.body.id_midia != "") {
       if (req.body.titulo == null || req.body.titulo == "") {
          return res.status(400).json({ erro: 'Título não informado' });
       }
+      let poster = req.body.poster;
+  if (poster == null) {
+    poster = "https://via.placeholder.com/210x295?text=Sem+Imagem";
+  } 
       let origemApi = 'omdb';
       if (req.body.tipo === 'serie') {
          origemApi = 'tvmaze';
@@ -34,7 +38,8 @@ if (req.body.id_midia != null && req.body.id_midia != "") {
          origem_api: origemApi,
          tipo: req.body.tipo,
          id_externo: req.body.id_externo,
-         titulo: req.body.titulo
+         titulo: req.body.titulo,
+         poster: poster
       });
    }
 

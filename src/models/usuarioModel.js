@@ -38,7 +38,7 @@ const contarAdmins = () => {
 const createUsuario = (usuarioData) => {
    const senhaHash = bcrypt.hashSync(usuarioData.senha, 10);
    db.prepare('INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES (?, ?, ?, ?)').run(usuarioData.nome, usuarioData.email, senhaHash, 'comum');
-   return getAllUsuarios();
+   return getUsuarioEmail(usuarioData.email);
 };
 
 const deleteUsuario = (id) => {
@@ -50,7 +50,7 @@ const deleteUsuario = (id) => {
       return false;
    }
    db.prepare('DELETE FROM usuarios WHERE id_usuario = ?').run(id);
-   return getAllUsuarios();
+   return getUsuarioId(id);
 };
 
 const atualizarUsuario = (usuarioData) => {
@@ -59,7 +59,12 @@ const atualizarUsuario = (usuarioData) => {
       return null;
    }
    db.prepare('UPDATE usuarios SET nome = ?, email = ? WHERE id_usuario = ?').run(usuarioData.nome, usuarioData.email, usuarioData.id);
-   return getAllUsuarios();
+   return getUsuarioId(usuarioData.id);
+};
+
+const atualizarSenha = (id, senha) => {
+  const hash = bcrypt.hashSync(senha, 10);
+  db.prepare('UPDATE usuarios SET senha_hash = ? WHERE id_usuario = ?').run(hash, id);
 };
 
 module.exports = {
@@ -71,5 +76,6 @@ module.exports = {
    contarAdmins,
    createUsuario,
    deleteUsuario,
-   atualizarUsuario
+   atualizarUsuario,
+   atualizarSenha
 }

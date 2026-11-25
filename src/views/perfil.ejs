@@ -21,6 +21,7 @@
         <button class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#editarPerfilModal">
           Editar Perfil
         </button>
+        <button class="btn btn-danger ms-2" id="btnExcluirConta">Excluir conta</button>
       </div>
 
       <div class="row text-center">
@@ -58,7 +59,47 @@
 
       <div id="listaAvaliados" class="row"></div>
     </div>
-
+    <nav class="navbar">
+    <div class="modal fade" id="editarPerfilModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="bi bi-pencil"></i>
+              Editar Perfil
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          
+          
+          
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Nome</label>
+              <input type="text" class="form-control" id="editarNome" placeholder="Novo nome" autocomplete="new-password" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="editarEmail" placeholder="Novo email" autocomplete="new-password"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nova Senha</label>
+              <input type="password" class="form-control" id="editarSenha" placeholder="Nova senha"  />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirmar Nova Senha</label>
+              <input type="password" class="form-control" id="editarConfirmacaoSenha" placeholder="Confirmar senha" 
+                placeholder="Confirme a nova senha" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn w-100" id="btnSalvarEdicao">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    </nav>
     
 
   </main>

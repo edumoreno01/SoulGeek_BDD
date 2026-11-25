@@ -90,12 +90,27 @@ const atualizarUsuario = (req, res) => {
    if (donoNome && donoNome.id !== usuarioexistente.id ){
     return res.status(400).json({ erro: 'Nome repetido' });
    }
-   const dados = {
+   const senhaNova = req.body.senha;
+if (senhaNova !== undefined && senhaNova !== "") {
+  if (senhaNova.length < 6) {
+    return res.status(400).json({ erro: 'A senha deve ter pelo menos 6 caracteres' });
+  }
+}
+      const dados = {
     id: req.params.id,
-    nome:req.body.nome,
+    nome: req.body.nome,
     email: req.body.email
    };
-    const usuarioatualizada = usuarioModel.atualizarUsuario(dados);
+   const usuarioatualizada = usuarioModel.atualizarUsuario(dados);
+
+   if (senhaNova !== undefined && senhaNova !== "") {
+      usuarioModel.atualizarSenha(req.params.id, senhaNova);
+   }
+
+   if (req.session.usuario.id === parseInt(req.params.id)) {
+      req.session.usuario.nome = req.body.nome;
+   }
+
    res.json(usuarioatualizada);
 };
 
@@ -120,7 +135,7 @@ const login = (req, res) => {
 
 const logout = (req, res) => {
    req.session.destroy(() => {
-      res.status(200).json({erro: 'Logout realizado'});
+      res.status(200).json({mensagem: 'Logout realizado'});
    });
 };
 

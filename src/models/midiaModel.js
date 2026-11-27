@@ -4,6 +4,10 @@ const getMidiaExterna = (origem_api, tipo, id_externo) => {
    return db.prepare('SELECT id_midia AS id, id_externo, tipo, origem_api, titulo FROM midias WHERE origem_api = ? AND tipo = ? AND id_externo = ?').get(origem_api, tipo, String(id_externo));
 };
 
+const getMidiaLocalTituloAno = (titulo, ano) => {
+   return db.prepare('SELECT id_midia AS id FROM midias WHERE origem_api = ? AND titulo = ? COLLATE NOCASE AND ano IS ?').get('local', titulo, ano);
+}
+
 const createMidiaExterna = (dados) => {
    return db.prepare('INSERT INTO midias (id_externo, tipo, origem_api, titulo, poster) VALUES (?, ?, ?, ?, ?)').run(String(dados.id_externo), dados.tipo, dados.origem_api, dados.titulo, dados.poster || null);
 }
@@ -50,6 +54,7 @@ const deleteMidia = (id) => {
 
 module.exports = {
    getMidiaExterna,
+   getMidiaLocalTituloAno,
    createMidiaExterna,
    acharOuCriarMidia,
     getAllMidias,

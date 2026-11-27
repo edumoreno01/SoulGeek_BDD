@@ -4,7 +4,7 @@
     <div id="perfilDeslogado" class="text-center mt-5">
       <h2>Você não está logado</h2>
 
-      <p>Entre em uma conta para acessar seu perfil.</p>
+      <p>Entre em uma conta para acessar perfil.</p>
 
       <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#Login">
         Entrar
@@ -40,7 +40,38 @@
           <p>⭐ Média das Avaliações</p>
         </div>
       </div>
-
+    <div id="painelAdmin" class="mt-4" style="display: none">
+      <hr />
+      <h3>🛠️ Painel do Admin</h3>
+      <div class="row g-2">
+        <div class="col-md-6">
+          <input id="adminTitulo" class="form-control" placeholder="Título (obrigatório)" />
+        </div>
+        <div class="col-md-3">
+          <select id="adminTipo" class="form-select">
+            <option value="filme">Filme</option>
+            <option value="serie">Série</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <input id="adminAno" type="number" class="form-control" placeholder="Ano" />
+        </div>
+        <div class="col-md-6">
+          <input id="adminGenero" class="form-control" placeholder="Gênero" />
+        </div>
+        <div class="col-md-6">
+          <input id="adminPoster" class="form-control" placeholder="Link da imagem (poster)" />
+        </div>
+        <div class="col-12">
+          <textarea id="adminSinopse" class="form-control" rows="3" placeholder="Sinopse"></textarea>
+        </div>
+        <div class="col-12">
+          <button id="btnCadastrarMidia" class="btn btn-success">Cadastrar</button>
+        </div>
+      </div>
+      <h5 class="mt-4">Mídias cadastradas</h5>
+      <div id="listaMidiasLocais"></div>
+    </div>
       <hr />
 
       <h3>❤️ Curtidos</h3>

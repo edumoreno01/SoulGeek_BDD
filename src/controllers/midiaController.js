@@ -26,6 +26,10 @@ const getMidiaId = (req, res) => {
 }
 
 const createMidia = (req, res) => {
+   let ano = req.body.ano;
+   if(!ano){
+      ano = null;
+   }
    if(req.body.tipo == null || req.body.tipo == ""){
         return res.status(400).json({ erro: 'Digite um tipo' });
     }
@@ -35,13 +39,17 @@ const createMidia = (req, res) => {
     if(req.body.titulo == null || req.body.titulo == ""){
         return res.status(400).json({ erro: 'Digite um titulo' });
     }
+    const repitida = midiaModel.getMidiaLocalTituloAno(req.body.titulo, ano);
+      if(repitida){
+         return res.status(400).json({ erro: 'Mídia já cadastrada' });
+      }
     const dados = {
     tipo: req.body.tipo,
     titulo:req.body.titulo,
     poster: req.body.poster,
     sinopse: req.body.sinopse,
     genero: req.body.genero,
-    ano: req.body.ano,
+    ano: ano,
     criado_por: req.session.usuario.id
    };
     const createmidia = midiaModel.createMidia(dados);
@@ -76,6 +84,10 @@ const atualizarMidia = (req, res) => {
    }
    if(req.body.tipo !== "filme" && req.body.tipo !== "serie"){
         return res.status(400).json({ erro: 'Digite um tipo válido' });
+    }
+    const repitida = midiaModel.getMidiaLocalTituloAno(req.body.titulo, req.body.ano || null);
+    if(repitida && repitida.id !== midiaexistente.id){
+        return res.status(400).json({ erro: 'Mídia já cadastrada' });
     }
     
     const dados = {

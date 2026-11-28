@@ -1,0 +1,150 @@
+<%- include('partes/header_padrao')%> 
+
+  <main class="flex-grow-1 container">
+    <div id="perfilDeslogado" class="text-center mt-5">
+      <h2>Você não está logado</h2>
+
+      <p>Entre em uma conta para acessar perfil.</p>
+
+      <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#Login">
+        Entrar
+      </button>
+    </div>
+
+    <div id="perfilLogado" style="display: none">
+      <div class="d-flex align-items-center gap-3 mt-4 mb-4">
+        <i class="bi bi-person-circle fs-1"></i>
+        <div>
+          <h1 id="nomeUsuario" class="mb-0"></h1>
+          <p id="emailUsuario" class="text-secondary mb-0"></p>
+        </div>
+
+        <!--exclusivo do usuario da conta e do administrador-->
+        <button class="btn btn-danger ms-2" id="btnExcluirConta">Excluir conta</button>
+        <!---->
+      </div>
+
+      <div class="row text-center">
+        <div class="col">
+          <h3 id="qtdCurtidos">0</h3>
+          <p>❤️ Curtidos</p>
+        </div>
+
+        <div class="col">
+          <h3 id="qtdWatchlist">0</h3>
+          <p>📑 Adicionados</p>
+        </div>
+
+        <div class="col">
+          <h3 id="qtdNotas">0</h3>
+          <p>⭐ Média das Avaliações</p>
+        </div>
+      </div>
+    <div id="painelAdmin" class="mt-4" style="display: none">
+      <hr />
+      <h3>🛠️ Painel do Admin</h3>
+      <div class="row g-2">
+        <div class="col-md-6">
+          <input id="adminTitulo" class="form-control" placeholder="Título (obrigatório)" />
+        </div>
+        <div class="col-md-3">
+          <select id="adminTipo" class="form-select">
+            <option value="filme">Filme</option>
+            <option value="serie">Série</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <input id="adminAno" type="number" class="form-control" placeholder="Ano" />
+        </div>
+        <div class="col-md-6">
+          <input id="adminGenero" class="form-control" placeholder="Gênero" />
+        </div>
+        <div class="col-md-6">
+          <input id="adminPoster" class="form-control" placeholder="Link da imagem (poster)" />
+        </div>
+        <div class="col-12">
+          <textarea id="adminSinopse" class="form-control" rows="3" placeholder="Sinopse"></textarea>
+        </div>
+        <div class="col-12">
+          <button id="btnCadastrarMidia" class="btn btn-success">Cadastrar</button>
+        </div>
+      </div>
+      <h5 class="mt-4">Mídias cadastradas</h5>
+      <div id="listaMidiasLocais"></div>
+    </div>
+      <hr />
+
+      <h3>❤️ Curtidos</h3>
+
+      <div id="listaCurtidos" class="row"></div>
+
+      <hr />
+
+      <h3>📑 Adicionados</h3>
+
+      <div id="listaWatchlist" class="row"></div>
+
+      <hr />
+
+      <h3>⭐ Avaliados</h3>
+
+      <div id="listaAvaliados" class="row"></div>
+    </div>
+    <nav class="navbar">
+    <div class="modal fade" id="editarPerfilModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="bi bi-pencil"></i>
+              Editar Perfil
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          
+          
+          
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Nome</label>
+              <input type="text" class="form-control" id="editarNome" placeholder="Novo nome" autocomplete="new-password" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="editarEmail" placeholder="Novo email" autocomplete="new-password"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nova Senha</label>
+              <input type="password" class="form-control" id="editarSenha" placeholder="Nova senha"  />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Confirmar Nova Senha</label>
+              <input type="password" class="form-control" id="editarConfirmacaoSenha" placeholder="Confirmar senha" 
+                placeholder="Confirme a nova senha" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn w-100" id="btnSalvarEdicao">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    </nav>
+    
+
+  </main>
+
+
+  <section id="Sombra">
+    <input type="checkbox" id="btnClaroEscuro" />
+    <label for="btnClaroEscuro" class="slider">
+      <div id="fundo" class="btn btn-dark">
+        <i id="Sol" class="bi bi-brightness-high-fill"></i>
+        <i id="Lua" class="bi bi-moon-stars-fill"></i>
+      </div>
+    </label>
+  </section>
+
+<%- include('partes/footer')%>
+<script src="/js/perfil.js"></script>

@@ -80,3 +80,4 @@ function mostrarNaTela(filmes) {
     section.appendChild(cartao);
   });
 }
+carregarLocais("filme", "/detalhes-filme");

@@ -1,3 +1,5 @@
+const idLocal = new URLSearchParams(location.search).get("id");
+let midiaLocal = null;
 const serieSelecionada = localStorage.getItem("serieSelecionada");
 let serieAtual;
 let curtidaAtual = null;
@@ -30,7 +32,29 @@ async function buscarSerie() {
   atualizarBotaoLike();
 }
 
+async function buscarLocal() {
+  const resposta = await fetch("/api/midias/" + idLocal);
+  if (!resposta.ok) {
+    document.getElementById("titulo").innerText = "Série não encontrada";
+    return;
+  }
+  midiaLocal = await resposta.json();
 
+  document.getElementById("titulo").innerText = midiaLocal.titulo;
+  if (midiaLocal.poster) {
+    document.getElementById("imagem").src = midiaLocal.poster;
+  } else {
+    document.getElementById("imagem").src = "https://via.placeholder.com/210x295?text=Sem+Imagem";
+  }
+  if (midiaLocal.sinopse) {
+    document.getElementById("descricao").innerText = midiaLocal.sinopse;
+  } else {
+    document.getElementById("descricao").innerText = "Sem descrição disponível.";
+  }
+  document.getElementById("generos").innerText = midiaLocal.genero || "";
+
+  atualizarBotaoLike();
+}
 
 const btnWatchlist = document.getElementById("btnWatchlist");
 btnWatchlist.addEventListener("click", () => {
@@ -80,6 +104,14 @@ async function atualizarBotaoLike() {
     }
   }
 
+    if (midiaLocal) {
+      if (i.id === midiaLocal.id) {
+        curtidaAtual = i;
+      }
+    } else if (i.id_externo === String(serieAtual.id) && i.tipo === "serie") {
+      curtidaAtual = i;
+    }
+
   if (curtidaAtual) {
     btnLike.classList.remove("btn-danger");
     btnLike.classList.add("btn-success");
@@ -105,15 +137,21 @@ btnLike.addEventListener("click", async () => {
     if (serieAtual.image != null) {
       poster = serieAtual.image.original;
     }
-    resposta = await fetch("/api/curtidos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+        let corpo;
+    if (midiaLocal) {
+      corpo = { id_midia: midiaLocal.id };
+    } else {
+      corpo = JSON.stringify({
         tipo: "serie",
         id_externo: serieAtual.id,
         titulo: serieAtual.name,
         poster: poster,
-      }),
+      });
+    }
+    resposta = await fetch("/api/curtidos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: corpo,
     });
   }
 
@@ -125,4 +163,8 @@ btnLike.addEventListener("click", async () => {
   }
 });
 
-buscarSerie();
+if (idLocal) {
+  buscarLocal();
+} else {
+  buscarSerie();
+}

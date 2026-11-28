@@ -84,3 +84,4 @@ function mostrarNaTela(series) {
     section.appendChild(cartao);
   });
 }
+carregarLocais("serie", "/midias");

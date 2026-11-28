@@ -99,18 +99,16 @@ async function atualizarBotaoLike() {
   const lista = await resposta.json();
   curtidaAtual = null;
   for (let i = 0; i < lista.length; i++) {
-    if (lista[i].tipo === "serie" && lista[i].id_externo === String(serieAtual.id)) {
+    if (midiaLocal) {
+      if (lista[i].id === midiaLocal.id) {
+        curtidaAtual = lista[i];
+      }
+    } else if (lista[i].id_externo === String(serieAtual.id) && lista[i].tipo === "serie") {
       curtidaAtual = lista[i];
     }
   }
 
-    if (midiaLocal) {
-      if (i.id === midiaLocal.id) {
-        curtidaAtual = i;
-      }
-    } else if (i.id_externo === String(serieAtual.id) && i.tipo === "serie") {
-      curtidaAtual = i;
-    }
+    
 
   if (curtidaAtual) {
     btnLike.classList.remove("btn-danger");
@@ -141,18 +139,17 @@ btnLike.addEventListener("click", async () => {
     if (midiaLocal) {
       corpo = { id_midia: midiaLocal.id };
     } else {
-      corpo = JSON.stringify({
+      let poster = null;
+      if (serieAtual.image != null) {
+        poster = serieAtual.image.original;
+      }
+      corpo = {
         tipo: "serie",
         id_externo: serieAtual.id,
         titulo: serieAtual.name,
         poster: poster,
-      });
+      };
     }
-    resposta = await fetch("/api/curtidos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: corpo,
-    });
   }
 
   if (resposta.ok) {
